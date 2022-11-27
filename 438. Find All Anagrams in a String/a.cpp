@@ -54,7 +54,7 @@ public:
 		}
 
 		if (s_table == p_table)
-			ans.emplace_back(0);
+			ans.__emplace_back(0);
 
 		for (int i = 0; i < s_len - p_len; ++i)
 		{
@@ -62,16 +62,21 @@ public:
 			++s_table[s[i + p_len] - 'a'];
 
 			if (s_table == p_table)
-				ans.emplace_back(i + 1);
+				ans.__emplace_back(i + 1);
 		}
 		return ans;
 	}
 };
 
-class Solution2
+int main()
 {
-public:
-	vector<int> findAnagrams(string s, string p) {
+	string s = "abcccbad";
+	string p = "abc";
 
-	}
-};
+	Solution a;
+	vector<int> ans = a.findAnagrams(s, p);
+	cout << "[ ";
+	for(auto it = ans.begin(); it != ans.end(); ++it)
+		cout << *it << ", ";
+	cout << "\b\b ]" << endl;
+}
