@@ -33,9 +33,71 @@ Example 3:
 	The substring starting at 12 is "thefoobar". It is the concatenation of ["the","foo","bar"] which is a permutation of words.
 
 Constraints:
-	1 <= s.length <= 104
+	1 <= s.length <= 10^4
 	1 <= words.length <= 5000
 	1 <= words[i].length <= 30
 	s and words[i] consist of lowercase English letters.
 
 */
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+class Solution {
+public:
+	vector<int> findSubstring(string &s, vector<string> &words)
+	{
+		vector<int> res;
+		int m = words.size(), n = words[0].size(), ls = s.size();
+		for (int i = 0; i < n && i + m * n <= ls; ++i)
+		{
+			unordered_map<string, int> differ;
+			for (int j = 0; j < m; ++j)
+			{
+				++differ[s.substr(i + j * n, n)];
+			}
+
+			for (string &word: words)
+			{
+				if (--differ[word] == 0)
+					differ.erase(word);
+			}
+
+			for (int start = i; start < ls - m * n + 1; start += n)
+			{
+				if (start != i)
+				{
+					string word = s.substr(start + (m - 1) * n, n);
+					if (++differ[word] == 0)
+						differ.erase(word);
+					word = s.substr(start - n, n);
+					if (--differ[word] == 0)
+						differ.erase(word);
+				}
+				if (differ.empty())
+					res.emplace_back(start);
+			}
+		}
+		return res;
+	}
+};
+
+int main()
+{
+	cout << "Hello! leetcode 30\n";
+	string str1 = "barfoothefoobarman";
+	vector<string> sv1 = {"foo","bar"};
+
+	Solution sln1;
+	vector<int> ans1 = sln1.findSubstring(str1,sv1);
+
+	cout << "[ ";
+	for (auto it = ans1.begin(); it != ans1.end(); ++it)
+	{
+		cout << *it << ", ";
+	}
+	cout << "\b\b ]\n";
+}
